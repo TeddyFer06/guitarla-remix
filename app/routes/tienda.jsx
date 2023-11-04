@@ -1,4 +1,4 @@
-import { useLoaderData, Links } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { getGuitarras } from '~/models/guitarras.server';
 import Guitarra from '~/components/guitarra'
 import styles from '~/styles/guitarras.css'
