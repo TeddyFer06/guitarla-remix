@@ -2,7 +2,35 @@ import { getGuitarra } from '~/models/guitarras.server'
 import { useLoaderData } from '@remix-run/react'
 import styles from '~/styles/guitarras.css'
 
+export async function loader({ params }) {
+    const { guitarraUrl } = params
+
+    const guitarra = await getGuitarra(guitarraUrl);
+
+    // Si no encuentra la guitarra se lanza un error
+    if (guitarra.data.length === 0) {
+        throw new Response('', {
+            status: 404,
+            statusText: 'Guitarra No Encontrada'
+        })
+    }
+
+    return guitarra;
+}
+
 export function meta({ data }) {
+
+    if (!data) {
+        return [
+            {
+                title: 'GuitartLA - Guitarra No encontrada'
+            },
+            {
+                description: 'Guitarras, venta de guitarras, guitarra no encontrada'
+            }
+        ]
+    }
+
     return [
         {
             title: `GuitarLA - ${data.data[0].attributes.nombre}`
@@ -19,14 +47,6 @@ export function links() {
             rel: 'stylesheet',
             href: styles
         }]
-}
-
-export async function loader({ params }) {
-    const { guitarraUrl } = params
-
-    const guitarra = await getGuitarra(guitarraUrl);
-
-    return guitarra;
 }
 
 const Guitarra = () => {
